@@ -1,7 +1,7 @@
 print(1+1)
 print(2*3)
 print(5/2)
-print("Howdy, Y'all")
+print('Howdy, Y\'all')
 
 # print("comments don't run")
 # Comments are good for communicating with people
