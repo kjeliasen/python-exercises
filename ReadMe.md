@@ -1,2 +1,2 @@
-#Codeup Bayes Cohort
-##Python Class Exercises
+# Codeup Python Exercises
+## Bayes Cohort
