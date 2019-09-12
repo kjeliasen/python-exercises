@@ -305,6 +305,39 @@ for i in range(1, 10):
     Here is an odd number: 49
 """
 
+odd_nums = [x for x in range(50) if x % 2 == 1]
+
+
+def odd_number_loop(start_at, end_at):
+    for on_num in range(start_at, end_at + 1, 2):
+        print(f'Here is an odd number:{on_num:>3}')
+
+def check_user_number():
+    user_input = input('Gimmie an odd number less than 50:')
+    
+    while True:
+        if user_input.isdigit == False:
+            print(f'{user_input} ain\'t no number')
+            break
+
+        user_input = int(user_input)
+        
+        if user_input not in odd_nums:
+            print(f'{user_input} isn\'t very odd at all')
+            break
+            
+        if user_input > 1:
+            odd_number_loop(1, user_input - 2)
+
+        print(f'Yikes! Skipping number:{user_input:>3}')
+
+        if user_input < 49:
+            odd_number_loop(user_input + 2, 49)
+            
+        user_input = input('Gimmie another odd number less than 50:')
+
+        
+check_user_number()
 
 
 """
