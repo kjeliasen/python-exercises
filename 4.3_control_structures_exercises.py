@@ -6,6 +6,7 @@ Do your work for this exercise in a file named `4.3_control_structures_exercises
 ## 1. Conditional Basics
 
 ### 1.a. prompt the user for a day of the week, print out whether the day is Monday or not
+### 1.b. prompt the user for a day of the week, print out whether the day is a weekday or a weekend
 
 days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 
@@ -32,8 +33,8 @@ def get_user_day():
     user_input_day = input('Enter a galldanged day: ').capitalize()
     bailout = 0
     while user_input_day not in days:
-        print(f"I said a galldanged day, dammit! {day_to_use} ain't no day!")
-        if bailout < 4:
+        print(f"I said a galldanged day, dammit! {user_input_day} ain't no day!")
+        if bailout < 3:
             user_input_day = input('Enter a real galldanged day: ').capitalize()
             bailout += 1
         else:
@@ -59,42 +60,67 @@ def do_tests(day):
 
 day = do_tests(get_user_day())
 
-
-### 1.b. prompt the user for a day of the week, print out whether the day is a weekday or a weekend
-
  
 ### 1.c. create variables and make up values for
-### 1.c.1 the number of hours worked in one week
-### 1.c.2 the hourly rate
-### 1.c.3 how much the week's paycheck will be
+###      - the number of hours worked in one week
+###      -the hourly rate
+###      - how much the week's paycheck will be
+###      - write the python code that calculates the weekly paycheck. You get paid time and a half if you work more than 40 hours
 
-### 1.c.4 write the python code that calculates the weekly paycheck. You get paid time and a half if you work more than 40 hours
+output_format_1c = '{wage_type:<15s} | {hours:>7.2f} | {dollars:>10.2f}'
 
-#### 
+
+def output_1c(wage_type,hours,dollars):
+    print(output_format_1c.format(wage_type=wage_type, hours=hours, dollars=dollars))
+
+
+def run_pay_report():
+    output_1c('Straight Time',hours_st,pay_for_hours_st)
+    output_1c('Overtime',hours_ot,pay_for_hours_ot)
+    output_1c('TOTAL',hours_worked_in_week,total_pay)
+    
+
+hours_worked_in_week = 43
+hourly_rate = 7.25
+hours_st = min(hours_worked_in_week, 40)
+hours_ot = max(hours_worked_in_week - hours_st, 0)
+pay_for_hours_st = hours_st * hourly_rate
+pay_for_hours_ot = hours_ot * hourly_rate * 1.5
+total_pay = pay_for_hours_st + pay_for_hours_ot
+hours_st
+
+run_pay_report()
+
+
+
+
+
+
+
 ## Loop Basics
-#### 
+
 ### While
-#### 
-#### Create an integer variable i with a value of 5.
+
+### 2. Create an integer variable i with a value of 5.
 
 
 #### Create a while loop that runs so long as i is less than or equal to 15
 #### Each loop iteration, output the current value of i, then increment i by one.
 #### Your output should look like this:
 #### 
-#### 
-#### 5
-#### 6
-#### 7
-#### 8
-#### 9
-#### 10
-#### 11
-#### 12
-#### 13
-#### 14
-#### 15
-
+'''
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+'''
 
 #### Create a while loop that will count by 2's starting with 0 and ending at 100. Follow each number with a new line.
 
