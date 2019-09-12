@@ -7,49 +7,52 @@ Do your work for this exercise in a file named `4.3_control_structures_exercises
 
 ### 1.a. prompt the user for a day of the week, print out whether the day is Monday or not
 
-def load_days():
-    weekend_days = ["Saturday","Sunday"]
-    weekday_days =  ["Monday","Tuesday","Wednesday","Thursday","Friday"]
-    actual_days = weekday_days + weekend_days
+days = ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 
-def day_is_weekend(check_day):
-    return check_day in weekend_days
+weekday_days = days[:5]
+weekend_days = days[5:]
 
-def day_is_day(check_day):
-    return check_day in actual_days
+output_format = '{emphasis} {for_use} {use_is} a {kind}.'
+
+clauses = {
+    True: ('Yeehaw!', 'sure is'),
+    False: ('Shucks.', 'ain\'t')
+}
+
+
+def day_is_weekend(day):
+    return day in weekend_days
+
+
+def day_is_day(day):
+    return day in weekday_days
+
 
 def get_user_day():
-    user_input_day = input("Enter a galldanged day: ")
-    return str(user_input_day.capitalize())
+    user_input_day = input('Enter a galldanged day: ').capitalize()
+    while user_input_day not in days:
+        print(f"I said a galldanged day, dammit! {day_to_use} ain't no day!")
+        user_input_day = input('Enter a galldanged day: ').capitalize()
+    return user_input_day.capitalize()
 
-def day_is_monday(check_day):
-    return check_day == 'Monday'
 
-def is_aint(true_false):
-    if true_false:
-        return "sure is"
-    else:
-        return "ain't"
+def day_is_monday(day):
+    return day == days[0]
 
-def yeehaw(true_false)
-    if true_false:
-        return "Yeehaw!"
-    else:
-        return "Shucks."
 
-def gee_whiz(emphasis,for_day,use_is,a_what):
-    return f'{emphasis} {for_use} {use_is} {a_what}.'
+def report(kind, day, fn):
+    c = clauses[fn(day)]
+    print(output_format.format(kind=kind, emphasis=c[0], for_use=day, use_is=c[1]))
 
-is_a_what = 'a Monday'
-day_to_use = get_user_day
-load_days
-if day_is_day(day_to_use):
-    is_yup = day_is_monday(day_to_use)
-    print(gee_whiz(yeehaw(is_yup),day_to_use,is_aint(is_yup),is_a_what)
-    use_emphasis = yeehaw(is_yup)
-    use_is = is_aint(is_yup)
-else:
-    print(f"I said a galldanged day, dammit! {day_to_use} ain't no day!")
+
+def do_tests(day):
+    report('Monday', day, day_is_monday)
+    report('weekday', day, day_is_day)
+    report('weekend', day, day_is_weekend)
+
+
+day = do_tests(get_user_day())
+
 
 ### 1.b. prompt the user for a day of the week, print out whether the day is a weekday or a weekend
 
