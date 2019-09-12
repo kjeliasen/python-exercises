@@ -310,14 +310,14 @@ odd_nums = [x for x in range(50) if x % 2 == 1]
 
 def odd_number_loop(start_at, end_at):
     for on_num in range(start_at, end_at + 1, 2):
-        print(f'Here is an odd number:{on_num:>3}')
+        print(f'Here is an odd integer:{on_num:>3}')
 
 def check_user_number():
-    user_input = input('Gimmie an odd number less than 50:')
+    user_input = input('Gimmie an odd integet less than 50: ')
     
     while True:
-        if user_input.isdigit == False:
-            print(f'{user_input} ain\'t no number')
+        if user_input.isdigit() == False:
+            print(f'{user_input} ain\'t no integer')
             break
 
         user_input = int(user_input)
@@ -334,7 +334,7 @@ def check_user_number():
         if user_input < 49:
             odd_number_loop(user_input + 2, 49)
             
-        user_input = input('Gimmie another odd number less than 50:')
+        user_input = input('Gimmie another odd integer less than 50:')
 
         
 check_user_number()
@@ -348,6 +348,28 @@ check_user_number()
     also note that the input function returns a string, so you'll need to 
     convert this to a numeric type.)
 """
+
+def print_count_to_number(start_at, end_at, increment):
+    count_out = [print(num) for num in range(start_at, end_at, increment)]
+
+
+def count_to_user_number():
+    user_input = input('Gimmie an positive integer: ')
+    
+    while True:
+        if user_input.isdigit() == False:
+            print(f'{user_input} ain\'t no integer')
+            break
+
+        user_int = int(user_input)
+        
+        if user_int > 0:
+            print_count_to_number(0, user_int+1, 1)
+            
+        user_input = input('Gimmie another positive integer: ')
+
+        
+count_to_user_number()
  
 
 """
@@ -367,6 +389,15 @@ For numbers which are multiples of both three and five print "FizzBuzz".
 """
 
 
+for num in range(1, 101):
+    fb = ''
+    if num % 3 == 0:
+        fb += 'Fizz'
+    if num % 5 == 0:
+        fb += 'Buzz'
+    if not fb:
+        fb = num
+    print(fb)
 
 
 ### Display a table of powers.
@@ -394,7 +425,46 @@ Example Output
 """
 ### Bonus: Research python's format string specifiers to align the table
 
+top_output_format = "{col_num:>8s} | {col_square:>8s} | {col_cube:>8s}"
+lbl_num = '{:<8s}'.format('number')
+lbl_square = '{:<8s}'.format('squared')
+lbl_cube = '{:<8s}'.format('cubed')
+lbl_fill = '{:-<8s}'.format('')
 
+def output_table_of_powers(upto_number):
+    print('\nTable for {}\n'.format(upto_number))
+    print(top_output_format.format(col_num=lbl_num, col_square=lbl_square, col_cube=lbl_cube))
+    print(top_output_format.format(col_num=lbl_fill, col_square=lbl_fill, col_cube=lbl_fill))
+    for num in range(1, upto_number + 1):
+        print(top_output_format.format(col_num=str(num), col_square=str(num **2), col_cube=str(num ** 3)))
+
+def get_user_number_for_table():
+    go_on = 'Y'
+    
+    while go_on == 'Y':
+        user_input = input('Gimmie a positive integer to power up: ')
+        
+        if user_input.isdigit() == False:
+            print(f'{user_input} ain\'t no positive integer. How\'s about 5?')
+            user_input = 5
+
+        user_int = int(user_input)
+
+        if user_int > 20:
+            print('Sorry, I ain\'t countin\' that high. How\'s about 20?')
+            user_int = 20
+
+        if user_int < 3:
+            print('Don\'t wanna go that low. How\'s about 3?')
+            user_int = 3
+
+        output_table_of_powers(user_int)
+        
+        go_on = input('Wanna try again? (Y/N) ').upper()
+        
+
+get_user_number_for_table()
+         
 
 """
     Convert given number grades into letter grades.
