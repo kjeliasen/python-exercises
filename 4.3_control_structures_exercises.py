@@ -30,9 +30,15 @@ def day_is_day(day):
 
 def get_user_day():
     user_input_day = input('Enter a galldanged day: ').capitalize()
+    bailout = 0
     while user_input_day not in days:
         print(f"I said a galldanged day, dammit! {day_to_use} ain't no day!")
-        user_input_day = input('Enter a galldanged day: ').capitalize()
+        if bailout < 4:
+            user_input_day = input('Enter a real galldanged day: ').capitalize()
+            bailout += 1
+        else:
+            user_input_day = 'Tuesday'
+            print('Screw it. We\'re going with ' + user_input_day)
     return user_input_day.capitalize()
 
 
