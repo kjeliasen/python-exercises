@@ -61,23 +61,14 @@ def return_word(chars):
     tip.
 """
 
-def calculate_tip(check_amount, tip_percent=.2, tax_amount=0, round_to_dollar=0):
-    """
-    Calculates tip based on check amount and target tip percentage. Allows choice
-    of tip percentage (defaults to .2 - 20%), removal of tax from the tip
-    calculation, and the ability to round the final payment up to a set dollar
-    multiple (e.g. nearest whole dollar, nearest $5, nearest $10) (or down if 
-    less than 10% of the initially-calculated tip)
-    """
-
 
 def calculate_tip(check_amount, tip_percent=.2, tax_amount=0, round_to_dollar=0):
     """
-    Calculates tip based on check amount and target tip percentage. Allows choice
-    of tip percentage (defaults to .2 - 20%), removal of tax from the tip
-    calculation, and the ability to round the final payment up to a set dollar
-    multiple (e.g. nearest whole dollar, nearest $5, nearest $10) (or down if 
-    less than 10% of the initially-calculated tip)
+        Calculates tip based on check amount and target tip percentage. Allows 
+        choice of tip percentage (defaults to .2 - 20%), removal of tax from 
+        the tip calculation, and the ability to round the final payment up to 
+        a set dollar multiple (e.g. nearest whole dollar, nearest $5, nearest 
+        $10) (or down if less than 10% of the initially-calculated tip)
     """
     tippable_amount = round(check_amount - tax_amount, 2)
     base_tip_amount = round(tippable_amount * tip_percent, 2)
@@ -96,10 +87,10 @@ def calculate_tip(check_amount, tip_percent=.2, tax_amount=0, round_to_dollar=0)
     print(output_format.format(Check=check_amount, BT=base_tip_amount, Tip=tip_amount, Total=pay_amount))
     if plus_round:
         print('final tip is {:.1f}%'.format(100*tip_amount/tippable_amount))
-    return tip_amount, check_amount
+    return tip_amount
 
 
-to_tip, to_pay = calculate_tip(53.42,.25,6.75,5)
+to_tip = calculate_tip(53.42,.25,6.75,5)
 
 """
 6.  Define a function named apply_discount. It should accept a original price, 
@@ -107,6 +98,12 @@ to_tip, to_pay = calculate_tip(53.42,.25,6.75,5)
     applied.
 """
 
+def apply_discount(original_price, discount_percentage):
+    """
+        Accepts original price and discount percentage (0-1), returns price 
+        after discount
+    """
+    return round(original_price * discount_percentage, 2)
 
 
 """
@@ -114,6 +111,8 @@ to_tip, to_pay = calculate_tip(53.42,.25,6.75,5)
     number that contains commas in it as input, and return a number as output.
 """
 
+def handle_commas(chars):
+    return float(chars.replace(',', ''))
 
 
 """
@@ -121,13 +120,29 @@ to_tip, to_pay = calculate_tip(53.42,.25,6.75,5)
     return the letter grade associated with that number (A-F).
 """
 
-
+def letter_grade(number_grade)
+    if number_grade >= 89.5:
+        grade_letter = 'A'
+    elif number_grade >= 79.5:
+        grade_letter = 'B'
+    elif number_grade >= 69.5:
+        grade_letter = 'C'
+    elif number_grade >= 59.5:
+        grade_letter = 'D'
+    else:
+        grade_letter = 'F'
 
 """
 9.  Define a function named remove_vowels that accepts a string and returns a 
     string with all the vowels removed.
 """
 
+
+def remove_vowels(chars):
+    for vowel in 'aeiouAEIOU':
+        chars = chars.replace(vowel,'')
+
+    return chars 
 
 
 """
@@ -144,6 +159,24 @@ to_tip, to_pay = calculate_tip(53.42,.25,6.75,5)
         % Completed will become completed
 """
 
+valid_chars = 'abcdefghijklmnopqrstuvwxyz0123456789_'
+
+
+def normalize_name(target_name):
+    in_process_name = target_name.strip()
+    in_process_name = in_process_name.replace(' ','_')
+    name_list = []
+    new_name = ''
+    for test in in_process_name:
+        if test.lower() in valid_chars:
+            name_list.append(test)
+    for char in name_list:
+        new_name = new_name + char
+    if new_name == target_name:
+        print('No change needed to ' + target_name)
+    else:
+        print('|{}| becomes |{}|'.format(target_name,new_name))
+    return new_name
 
 
 """
@@ -153,6 +186,13 @@ to_tip, to_pay = calculate_tip(53.42,.25,6.75,5)
         cumsum([1, 2, 3, 4]) returns [1, 3, 6, 10]
 """
 
+def cumsum(list):
+    runsum = 0
+    sumrun = []
+    for item in list:
+        runsum = runsum + item
+        sumrun.append(runsum)
+    return sumrun  
 
 
 """
@@ -167,7 +207,30 @@ Bonii
     the time in a 24-hour format. Bonus write a function that does the opposite.
 """
 
+def twelveto24(time_12):
+    hour_value = int(time_12[:-5])
+    minute_value = int(time_12[-4:-2])
+    is_pm = time_12.lower().endswith('pm')
+    if is_pm:
+        hour_value = hour_value + 12 
+    if hour_value == 24:
+        hour_value = 0 
+    time_24 = '{H:02d}:{M:02d}'.format(H=hour_value, M=minute_value)
+    print ('{} becomes {}'.format(time_12, time_24))
+    return time_24
 
+
+def twelvefrom24(time_24):
+    hour_value = int(time_24[:-3])
+    minute_value = int(time_24[-2:])
+    am_pm = 'PM' if hour_value > 11 else 'AM'
+    if hour_value > 11:
+        hour_value = hour_value - 12
+    if hour_value == 0:
+        hour_value = 12 
+    time_12 = '{H:d}:{M:02d}{AP}'.format(H=hour_value, M=minute_value,AP=am_pm)
+    print ('{} becomes {}'.format(time_24, time_12))
+    return time_12
 
 
 """
@@ -178,3 +241,16 @@ Bonii
         col_index('AA') returns 27
 """
 
+check_str = 'abcdefghijklmnopqrstuvwxyz'
+
+def col_index(col_ltrs):
+    flip_ltrs = reversed(col_ltrs.lower())
+    on_idx = 0
+    run_tot = 0
+    for ltr in flip_ltrs:
+        ltr_num = check_str.find(ltr) + 1
+        ltr_val = ltr_num * (26 ** on_idx)
+        on_idx += 1
+        run_tot += ltr_val
+    print(col_ltrs, run_tot, '\n')
+    return run_tot
