@@ -490,3 +490,26 @@ get_user_number_for_table()
     Prompt the user to enter a genre, then loop through your books list and print out the titles of all the books in that genre.
     """
 
+grade_minimums = (
+    ('A+',98.5),('A',91.5),('A-',89.5),
+    ('B+',88.5),('B',81.5),('B-',79.5),
+    ('C+',78.5),('C',71.5),('C-',69.5),
+    ('D+',68.5),('D',61.5),('D-',59.5),
+    ('F',0)
+)
+
+def get_letter_grade(numeric_grade):
+    ubound = max(100,numeric_grade + .01)
+    for grade in grade_minimums:
+        if numeric_grade < grade[1]:
+            ubound = grade[1]
+        else:
+            print('{}% is graded {}'.format(numeric_grade,grade[0]))
+            return grade[0]
+        
+assert get_letter_grade(150) == 'A+'
+assert get_letter_grade(98.4) == 'A'
+assert get_letter_grade(91) == 'A-'
+assert get_letter_grade(59.4) == 'F'
+assert get_letter_grade(81.5) == 'B'
+assert get_letter_grade(89.5) == 'A-'
