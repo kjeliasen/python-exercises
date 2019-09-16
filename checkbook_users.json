@@ -3,12 +3,14 @@
         "user_id": "001",
         "first_name": "Owen",
         "last_name": "Lotts",
-        "blah": "blah, blah"
+        "blah": "blah, blah",
+        "user_file_name": "checkbook_user_001.json"
     },
     {
         "user_id": "002",
         "first_name": "Bob",
         "last_name": "Pabaloobop",
-        "blah": "blah, blah"
+        "blah": "blah, blah",
+        "user_file_name": "checkbook_user_002.json"
     }
 ]

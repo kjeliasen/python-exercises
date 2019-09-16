@@ -15,7 +15,8 @@ The application should persist between times that it is run, that is, if you run
 Here is an example of what using the program might look like:
 
 
-`    $ python checkbook.py
+`
+    $ python checkbook.py
 
     ~~~ Welcome to your terminal checkbook! ~~~
 
@@ -64,7 +65,8 @@ Here is an example of what using the program might look like:
 
     Your choice? 4
 
-    Thanks, have a great day!`
+    Thanks, have a great day!
+`
 
 ### Additional Features
 Once you have finished the basic application (in no particular order),
