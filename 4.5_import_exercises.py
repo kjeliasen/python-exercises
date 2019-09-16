@@ -173,6 +173,26 @@ least_favorite_fruit = [f[0] for f in favorite_fruits if f[1] == min_fav_count]
 
 print('The most common favorite fruit is {}, while the least common is {}.'.format(most_favorite_fruit[0], least_favorite_fruit[0]))
 
+#OR ANOTHER WAY
+
+fruit_counts = {}
+for profile in profiles:
+    fruit = profile['favoriteFruit']
+    if fruit in fruit_counts:
+        fruit_counts[fruit] += 1
+    else:
+        fruit_counts[fruit] = 1
+
+
+# OR THE BETTER WAY:
+from collections import Counter
+fruit_counts = Counter([p['favoriteFruit'] for p in profiles])
+min_fruit = min(dict(Counter([p['favoriteFruit'] for p in profiles])).items(), key=lambda item: item[1])
+print(min_fruit)
+
+# ALSO:
+# min_fruit = min(dict(fruit_counts).items(), key=lambda item: item[1])
+
 
 """
     Total number of unread messages for all users
@@ -190,3 +210,7 @@ for g in greetings:
 print('There are {} unread messages'.format(unread_messages))
     
 
+def extract_digits(s)
+    return ''.join([c for c in s if c.isdigit()])
+l_unread_messages = [extract_digits(greeting for greeting in greetings)]
+n_unread_messages = sum(l_unread_messages)
