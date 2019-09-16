@@ -134,6 +134,11 @@ for lbu in lowest_balance_users:
     print(lbu)
 
 
+# OR IN ONE LINE:
+low_bal_user = min(profiles, key=lambda p: float(p['balance'].replace('$','').replace(',','')))
+print(low_bal_user)
+
+
 """
     User with the highest balance
 """
@@ -142,6 +147,10 @@ highest_balance_users = [b[1] for b in bals if b[0] == highest_balance]
 print('The highest balance is {:.2f}, which is held by:'.format(highest_balance))
 for hbu in highest_balance_users:
     print(hbu)
+
+# OR IN ONE LINE:
+high_bal_user = max(profiles, key=lambda p: float(p['balance'].replace('$','').replace(',','')))
+print(high_bal_user)
 
 
 """ 
@@ -175,7 +184,8 @@ for g in greetings:
     for c in g:
         if c in '0123456789':
             g_chars.append(c)
-    unread_messages += int(''.join(g_chars))
+    n = int(''.join(g_chars)) 
+    unread_messages += n
     # print(g, unread_messages)
 print('There are {} unread messages'.format(unread_messages))
     
