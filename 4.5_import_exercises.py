@@ -146,18 +146,36 @@ for hbu in highest_balance_users:
 
 """ 
     Most common favorite fruit
-"""
-user_favorite_fruits = [['favoriteFruit'] for p in profiles]
-favorite_fruit_set = set(user_favorite_fruits)
-favorite_fruits = [[uff, 0] for uff in user_favorite_fruits]
 
-"""
     Least most common favorite fruit
 """
+user_favorite_fruits = [p['favoriteFruit'] for p in profiles]
+favorite_fruit_set = set(user_favorite_fruits)
+favorite_fruits = []
+for item in favorite_fruit_set:
+    fruit_name = item
+    fav_count = sum([1 for pick in user_favorite_fruits if pick == item])
+    favorite_fruits.append([fruit_name, fav_count])
+
+max_fav_count = max([f[1] for f in favorite_fruits])
+min_fav_count = min([f[1] for f in favorite_fruits])
+most_favorite_fruit = [f[0] for f in favorite_fruits if f[1] == max_fav_count]
+least_favorite_fruit = [f[0] for f in favorite_fruits if f[1] == min_fav_count]
+
+print('The most common favorite fruit is {}, while the least common is {}.'.format(most_favorite_fruit[0], least_favorite_fruit[0]))
 
 
 """
     Total number of unread messages for all users
 """
+greetings = [p['greeting'] for p in profiles]
+for g in greetings:
+    g_chars = []
+    for c in g:
+        if c in '0123456789':
+            g_chars.append(c)
+    g = int(g_chars.join())
 
+print(greetings)
+    
 
