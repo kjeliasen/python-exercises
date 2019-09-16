@@ -126,15 +126,16 @@ def calculate_tip(check_amount, tip_percent=.2, tax_amount=0, round_to_dollar=0)
             plus_round = round_to_dollar - above_round
     tip_amount = base_tip_amount + plus_round
     pay_amount = check_amount + tip_amount
-    output_format = 'Check: {Check:>9.2f}\nTip: {Tip:>11.2f} (Base Tip: {BT:>6.2f})\nTotal: {Total:>9.2f}'
-    print(output_format.format(Check=check_amount, BT=base_tip_amount, Tip=tip_amount, \
-        Total=pay_amount))
-    if plus_round:
-        print('final tip is {:.1f}%'.format(100*tip_amount/tippable_amount))
-    return tip_amount
+    if __name__ == '__main__':
+        output_format = 'Check: {Check:>9.2f}\nTip: {Tip:>11.2f} (Base Tip: {BT:>6.2f})\nTotal: {Total:>9.2f}'
+        print(output_format.format(Check=check_amount, BT=base_tip_amount, \
+            Tip=tip_amount, Total=pay_amount))
+        if plus_round:
+            print('final tip is {:.1f}%'.format(100*tip_amount/tippable_amount))
+    return round(tip_amount, 2)
 
 
-to_tip = calculate_tip(53.42,.25,6.75,5)
+# to_tip = calculate_tip(53.42,.25,6.75,5)
 
 
 def apply_discount(original_price, discount_percentage):
