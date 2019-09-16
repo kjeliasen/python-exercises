@@ -14,8 +14,8 @@ The application should persist between times that it is run, that is, if you run
 
 Here is an example of what using the program might look like:
 
-
 `
+
     $ python checkbook.py
 
     ~~~ Welcome to your terminal checkbook! ~~~
