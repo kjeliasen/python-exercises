@@ -67,7 +67,7 @@ def is_consonant(char):
     True
     >>> is_consonant('y')
     Maybe
-    False
+    True
     >>> is_consonant('3')
     False
     """
@@ -88,13 +88,14 @@ def return_word(chars):
 
     >>> return_word('word')
     'Word'
-    >>> return_word('WORD')
-    'WORD'
+    >>> return_word('yard')
+    Maybe
+    'Yard'
     >>> return_word('award')
     'award'
     """
     if is_consonant(chars):
-        return chars.capitalize
+        return chars.capitalize() 
     else:
         return chars
 
@@ -216,7 +217,7 @@ def normalize_name(target_name):
     'first_name'
     >>> normalize_name('% Completed')
     'completed'
-    >>> normalize_name('7_how\'s this?')
+    >>> normalize_name("7_how's this?")
     '_7_hows_this'
     """
     valid_chars = 'abcdefghijklmnopqrstuvwxyz0123456789_ '
