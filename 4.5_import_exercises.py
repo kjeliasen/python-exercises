@@ -121,7 +121,7 @@ print('{} total balance for all users'.format(total_balance))
     Average balance per user
 """
 average_balance = total_balance / users
-print('the average user balance is {:.2f}'.format(average_balance))
+print('The average user balance is {:.2f}'.format(average_balance))
 
 
 """
@@ -129,7 +129,9 @@ print('the average user balance is {:.2f}'.format(average_balance))
 """
 lowest_balance = min([b[0] for b in bals])
 lowest_balance_users = [b[1] for b in bals if b[0] == lowest_balance]
-print(lowest_balance_users)
+print('The lowest balance is {:.2f}, which is held by:'.format(lowest_balance))
+for lbu in lowest_balance_users:
+    print(lbu)
 
 
 """
@@ -137,14 +139,17 @@ print(lowest_balance_users)
 """
 highest_balance = max([b[0] for b in bals])
 highest_balance_users = [b[1] for b in bals if b[0] == highest_balance]
-print(highest_balance_users, highest_balance)
+print('The highest balance is {:.2f}, which is held by:'.format(highest_balance))
+for hbu in highest_balance_users:
+    print(hbu)
 
 
 """ 
     Most common favorite fruit
 """
-
-
+user_favorite_fruits = [['favoriteFruit'] for p in profiles]
+favorite_fruit_set = set(user_favorite_fruits)
+favorite_fruits = [[uff, 0] for uff in user_favorite_fruits]
 
 """
     Least most common favorite fruit
