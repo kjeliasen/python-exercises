@@ -168,14 +168,15 @@ print('The most common favorite fruit is {}, while the least common is {}.'.form
 """
     Total number of unread messages for all users
 """
+unread_messages = 0
 greetings = [p['greeting'] for p in profiles]
 for g in greetings:
     g_chars = []
     for c in g:
         if c in '0123456789':
             g_chars.append(c)
-    g = int(g_chars.join())
-
-print(greetings)
+    unread_messages += int(''.join(g_chars))
+    # print(g, unread_messages)
+print('There are {} unread messages'.format(unread_messages))
     
 
