@@ -26,7 +26,9 @@ class UserExitException(Exception):
 
 def main():
     commands = init_command_list()
-    users, accounts, transactions = load(transactions_file_load)
+    all_users, all_accounts, all_transactions = load(transactions_file_load)
+    cur_user_accounts = 
+
 
     try:
     # do all the things
@@ -64,19 +66,22 @@ def save(users, accounts, transactions, file=transactions_file_save):
 
 
 def cl_view_balance(cur_user, cur_account, users, accounts, transactions):
+    
+    
     print('view balance')
-    pass
-
+    
 
 def cl_record_debit(cur_user, cur_account, users, accounts, transactions):
+    
+    
     print('record debit')
-    pass
-
+    
 
 def cl_record_credit(cur_user, cur_account, users, accounts, transactions):
+    
+    
     print('record credit')
-    pass
-
+    
 
 def cl_change_user(cur_user, cur_account, users, accounts, transactions):
     print('change user')
@@ -84,24 +89,29 @@ def cl_change_user(cur_user, cur_account, users, accounts, transactions):
 
 
 def cl_change_account(cur_user, cur_account, users, accounts, transactions):
+    
+    
     print('change amount')
-    pass
-
+    
 
 def cl_get_users_info(cur_user, cur_account, users, accounts, transactions):
+    
+    
     print(users)
-    pass
-
+    
 
 def cl_get_accounts_info(cur_user, cur_account, users, accounts, transactions):
+    
+    
     print(accounts)
-    pass
+    
 
 
 def cl_get_transactions_info(cur_user, cur_account, users, accounts, transactions):
+    
+    
     print(transactions)
-    pass
-
+    
 
 def cl_dictionary_info(cur_user, cur_account, users, accounts, transactions):
     print(users, accounts, transactions)
