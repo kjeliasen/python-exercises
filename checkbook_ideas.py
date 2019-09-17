@@ -18,7 +18,7 @@ def main():
 
 
 def load(username):
-    with open(f'checkbook_{username}.json') as fin:
+    with open(f'checkbook_accounts.json') as fin:
         data = json.load(fin))
     transactions = data['transactions']
     accounts = data['accounts']
@@ -41,8 +41,12 @@ if __name__ == '__main__':
 
 
 commands = {
-    '1': (view_balance, 'view balance'),
-    '2': record_debit,
+    '1': (view_balance, 'View Balance'),
+    '2': (record_debit, 'Make Deposit'),
+    '3': (record_credit 'Withdraw Funds'),
+    '4': (change_user, 'Change User'),
+    '5': (change_account, 'Change Account'),
+    'X': (bailout, 'Exit')
     # ...
 }
 
