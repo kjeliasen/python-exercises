@@ -14,11 +14,26 @@ def main():
         command = input('enter the thing to do: ')
         fn = commands.get(command, unknown)
         fn()
+    save(transactions, users, accounts)
 
 
-def load():
-    with open ('checkbook_users.json') as u:
-        users(json.load(u))
+def load(username):
+    with open(f'checkbook_{username}.json') as fin:
+        data = json.load(fin))
+    transactions = data['transactions']
+    accounts = data['accounts']
+    users = data['users']
+    return transactions, users, accounts
+
+def save(username, transactions, users, accounts):
+    data = dict(
+        users=user
+        transactions=transactions,
+        accounts=accounts,
+    )
+    with open(f'checkbook_{username}.json', 'w') as fout:
+        json.dump(fout, data)
+
 
 
 if __name__ == '__main__':
@@ -30,10 +45,6 @@ commands = {
     '2': record_debit,
     # ...
 }
-
-
-commands['1'] # -> <func view_balance>
-commands['2'] # -> <func record_debit>
 
 
 def view_balance():
