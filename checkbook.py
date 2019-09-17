@@ -9,6 +9,8 @@ import time as t
 
 is_running = False
 
+class UserExitException(Exception):
+    print('User Selected Exit')
 
 def main():
     try:
@@ -70,8 +72,8 @@ def change_account():
 
 
 def bailout():
-    print('Bailout')
-    raise Exception('user selected exit')
+    # print('Bailout')
+    raise UserExitException
 
 
 def unknown():
