@@ -40,3 +40,38 @@ def extract_time_components(time24):
         seconds=seconds
     )
     return(time_components)
+
+def better_extract_time_components(time24):
+    '''
+    Write a function named extract_time_components. It should take in a string 
+    that is a 24-hour time with the hour, minutes, and seconds seperated by 
+    :s, and return a dictionary with keys hour, minutes, and seconds with 
+    corresponding integer values.
+
+    >>> better_extract_time_components('21:30:00')
+    {'hours': 21, 'minutes': 30, 'seconds': 0}
+    >>> better_extract_time_components('09:01:53')
+    {'hours': 9, 'minutes': 1, 'seconds': 53}
+    '''
+    hours, minutes, seconds = [int(n) for n in time24.split(':')]
+    time_components = {
+        'hours' : hours,
+        'minutes' : minutes,
+        'seconds' : seconds
+    }
+    return(time_components)
+
+
+def nifty_extract_time_components(time24):
+    '''
+    Write a function named extract_time_components. It should take in a string 
+    that is a 24-hour time with the hour, minutes, and seconds seperated by 
+    :s, and return a dictionary with keys hour, minutes, and seconds with 
+    corresponding integer values.
+
+    >>> nifty_extract_time_components('21:30:00')
+    {'hours': 21, 'minutes': 30, 'seconds': 0}
+    >>> nifty_extract_time_components('09:01:53')
+    {'hours': 9, 'minutes': 1, 'seconds': 53}
+    '''
+    return dict(zip(['hours', 'minutes', 'seconds'], map(int, time24.split(':'))))
