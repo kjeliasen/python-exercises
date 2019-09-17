@@ -16,6 +16,8 @@ transactions_file_save = 'checkbook_accounts_saves.json'
 cur_user_id = '0'
 cur_account_id = '000'
 cur_transaction_id = '0'
+cur_user_dict = {}
+cur_account_dict = {}
 cur_transactions = {}
 users = {}
 accounts = {}
@@ -44,23 +46,23 @@ def main():
         print(e)
 
 
-def load(users, accounts, transactions, file=transactions_file_load):
+def load(file=transactions_file_load):
     with open(file) as fin:
         data = json.load(fin)
-    users = data['users']
-    accounts = data['accounts']
-    transactions = data['transactions']
-    return users, accounts, transactions
+    got_users = data['users']
+    got_accounts = data['accounts']
+    got_transactions = data['transactions']
+    return got_users, got_accounts, got_transactions
 
 
-def save(users, accounts, transactions, file=transactions_file_save):
-    data = dict(
-        users = users,
-        accounts = accounts,
-        transactions = transactions
-    )
-    with open(file) as fout:
-        json.dump(data, fout)
+def save(file=transactions_file_save):
+    data = {
+        'users': users,
+        'accounts': accounts,
+        'transactions': transactions
+    }
+    with open(file, 'w') as fout:
+        json.dump(data, fout, indent=2)
 
 
 def view_balance():
@@ -88,6 +90,31 @@ def change_account():
     pass
 
 
+def get_users_info():
+    print(users)
+    pass
+
+
+def get_accounts_info():
+    print(accounts)
+    pass
+
+
+def get_transactions_info():
+    print(transactions)
+    pass
+
+
+def dictionary_info():
+    print(users, accounts, transactions)
+    pass
+
+
+def save_file():
+    save(transactions_file_save)
+    pass
+
+
 def bailout():
     print('User selected \'exit\'')
     raise UserExitException
@@ -97,6 +124,14 @@ def unknown():
     print('wtf, chuck?')
 
 
+def update_user_variables(user_id):
+    user_info = {}
+    for account in accounts:
+        if account['user_id'] == cur_user_id:
+            user_info = account
+            break
+    return user_info
+
 def init_command_list():
     setcommands = {
         '1': (view_balance, 'View Balance'),
@@ -104,14 +139,20 @@ def init_command_list():
         '3': (record_credit, 'Withdraw Funds'),
         '4': (change_user, 'Change User'),
         '5': (change_account, 'Change Account'),
+        'C': (get_users_info, 'Check Users Data'),
+        'A': (get_accounts_info, 'Check Accounts Data'),
+        'T': (get_transactions_info, 'Check Transactions Data'),
+        'D': (dictionary_info, 'Check Dictionary Data'),
+        'S': (save_file, 'Save File'),
         'X': (bailout, 'Exit')
         # ...
     }
-    load(users, accounts, transactions, transactions_file_load)
     return setcommands
 
 
 if __name__ == '__main__':
     commands = init_command_list()
+    users, accounts, transactions = load(transactions_file_load)
+    # print(os.getcwd())
     main()
 
