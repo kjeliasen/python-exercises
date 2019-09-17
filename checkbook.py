@@ -10,18 +10,13 @@ import os
 
 
 # Declare Global Variables
-commands = {}
 transactions_file_load = 'checkbook_accounts.json'
 transactions_file_save = 'checkbook_accounts_saves.json'
-cur_user_id = '0'
-cur_account_id = '000'
-cur_transaction_id = '0'
+cur_user = '0'
+cur_account = '000'
 cur_user_dict = {}
 cur_account_dict = {}
 cur_transactions = {}
-users = {}
-accounts = {}
-transactions = {}
 data = {}
 
 
@@ -30,6 +25,9 @@ class UserExitException(Exception):
 
 
 def main():
+    commands = init_command_list()
+    users, accounts, transactions = load(transactions_file_load)
+
     try:
     # do all the things
         while True:
@@ -41,7 +39,7 @@ def main():
             print('\n\n')
             fn = commands.get(command, (unknown, "Unknown"))
             fn = fn[0]
-            fn()
+            fn(cur_user, cur_account, users, accounts, transactions)
     except Exception as e:
         print(e)
 
@@ -55,7 +53,7 @@ def load(file=transactions_file_load):
     return got_users, got_accounts, got_transactions
 
 
-def save(file=transactions_file_save):
+def save(users, accounts, transactions, file=transactions_file_save):
     data = {
         'users': users,
         'accounts': accounts,
@@ -65,62 +63,62 @@ def save(file=transactions_file_save):
         json.dump(data, fout, indent=2)
 
 
-def view_balance():
+def cl_view_balance(cur_user, cur_account, users, accounts, transactions):
     print('view balance')
     pass
 
 
-def record_debit():
+def cl_record_debit(cur_user, cur_account, users, accounts, transactions):
     print('record debit')
     pass
 
 
-def record_credit():
+def cl_record_credit(cur_user, cur_account, users, accounts, transactions):
     print('record credit')
     pass
 
 
-def change_user():
+def cl_change_user(cur_user, cur_account, users, accounts, transactions):
     print('change user')
     pass
 
 
-def change_account():
+def cl_change_account(cur_user, cur_account, users, accounts, transactions):
     print('change amount')
     pass
 
 
-def get_users_info():
+def cl_get_users_info(cur_user, cur_account, users, accounts, transactions):
     print(users)
     pass
 
 
-def get_accounts_info():
+def cl_get_accounts_info(cur_user, cur_account, users, accounts, transactions):
     print(accounts)
     pass
 
 
-def get_transactions_info():
+def cl_get_transactions_info(cur_user, cur_account, users, accounts, transactions):
     print(transactions)
     pass
 
 
-def dictionary_info():
+def cl_dictionary_info(cur_user, cur_account, users, accounts, transactions):
     print(users, accounts, transactions)
     pass
 
 
-def save_file():
-    save(transactions_file_save)
+def cl_save_file(cur_user, cur_account, users, accounts, transactions):
+    save(users, accounts, transactions, transactions_file_save)
     pass
 
 
-def bailout():
+def cl_bailout(cur_user, cur_account, users, accounts, transactions):
     print('User selected \'exit\'')
     raise UserExitException
 
 
-def unknown():
+def unknown(cur_user, cur_account, users, accounts, transactions):
     print('wtf, chuck?')
 
 
@@ -134,25 +132,23 @@ def update_user_variables(user_id):
 
 def init_command_list():
     setcommands = {
-        '1': (view_balance, 'View Balance'),
-        '2': (record_debit, 'Make Deposit'),
-        '3': (record_credit, 'Withdraw Funds'),
-        '4': (change_user, 'Change User'),
-        '5': (change_account, 'Change Account'),
-        'C': (get_users_info, 'Check Users Data'),
-        'A': (get_accounts_info, 'Check Accounts Data'),
-        'T': (get_transactions_info, 'Check Transactions Data'),
-        'D': (dictionary_info, 'Check Dictionary Data'),
-        'S': (save_file, 'Save File'),
-        'X': (bailout, 'Exit')
+        '1': (cl_view_balance, 'View Balance'),
+        '2': (cl_record_debit, 'Make Deposit'),
+        '3': (cl_record_credit, 'Withdraw Funds'),
+        '4': (cl_change_user, 'Change User'),
+        '5': (cl_change_account, 'Change Account'),
+        'C': (cl_get_users_info, 'Check Users Data'),
+        'A': (cl_get_accounts_info, 'Check Accounts Data'),
+        'T': (cl_get_transactions_info, 'Check Transactions Data'),
+        'D': (cl_dictionary_info, 'Check Dictionary Data'),
+        'S': (cl_save_file, 'Save File'),
+        'X': (cl_bailout, 'Exit')
         # ...
     }
     return setcommands
 
 
 if __name__ == '__main__':
-    commands = init_command_list()
-    users, accounts, transactions = load(transactions_file_load)
     # print(os.getcwd())
     main()
 
