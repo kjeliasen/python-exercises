@@ -19,8 +19,8 @@
   "entries": [
     {
       "trans_id": "1568729124.8222458",
-      "user_id": "000",
-      "account_id": "0",
+      "user_id": "1",
+      "account_id": "1",
       "date_recorded": "2019-09-01",
       "amount": "0",
       "description": "Open Account",

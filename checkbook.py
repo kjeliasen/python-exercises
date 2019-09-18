@@ -28,6 +28,11 @@ def bug_note(func, verb='checking', **kwargs):
         print([f'{key.upper()} == {value}' for key, value in kwargs.items()])
 
 
+def star_line():
+    txt = '*' * 80
+    print(txt)
+
+
 def load(file=entries_file_load):
     func = 'load'
     # bug_note(verb='starting', func=func)
@@ -37,6 +42,7 @@ def load(file=entries_file_load):
     got_accounts = data['accounts']
     got_entries = data['entries']
     # bug_note(verb='ending', func=func)
+    print('DEBUG - Loaded file {}'.format(file))
     return got_users, got_accounts, got_entries
 
 
@@ -51,6 +57,8 @@ def save(users, accounts, entries, file=entries_file_save):
     with open(file, 'w') as fout:
         json.dump(data, fout, indent=2)
     bug_note(verb='ending', func=func)
+    print('DEBUG - Saved file {}'.format(file))
+    load(file)
     return True
 
 
@@ -103,14 +111,27 @@ def get_cur_user_accounts(context, accounts, **kwargs):
 def get_cur_account_entries(context, entries, **kwargs):
     func = 'get_cur_account_entries'    
     bug_note(verb='looping', func=func)
-    return [entry for entry in entries if entry['account_id'] == context['current_account_id']]
+    current_entries = [entry for entry in entries if entry['account_id'] == context['current_account_id']]
+    context['current_entries'] = current_entries
+    bug_note(verb='ending', func=func, current_entries=context['current_entries'])
     
 
 def cl_view_balance(context, entries, **kwargs):
     func = 'cl_view_balance'    
     bug_note(verb='starting', func=func)
+    txt = ''
     # do some of the things
-    print('Viewing Balance')
+    star_line()
+    print('{:*^80s}'.format('  Viewing Balance  '))
+    star_line()
+    current_entries = context['current_entries']
+    # print(current_entries)
+    balance = sum([float(entry['amount']) for entry in current_entries])
+    num_entries = len(current_entries)
+#    print('\n\n')
+    print('\n\n{:*<5}{:5}Account {} has a current balance of ${:.2f}.\n{:*<5}{:5}({:d} entries)\n\n'.format(
+        txt, txt, str(context['current_account_id']), balance, txt, txt, num_entries
+    ))
     bug_note(verb='ending', func=func)
     
 
@@ -118,7 +139,7 @@ def cl_record_debit(context, entries, **kwargs):
     func = 'cl_record_debit'    
     bug_note(verb='starting', func=func)
     # do some of the things
-    print('Recording Debit')
+    print((' ' * 10) + 'Recording Debit')
     bug_note(verb='ending', func=func)
     
 
@@ -126,14 +147,14 @@ def cl_record_credit(context, entries,  **kwargs):
     func = 'cl_record_credit'    
     bug_note(verb='starting', func=func)
     # do some of the things
-    print('Recording Credit')
+    print((' ' * 10) + 'Recording Credit')
     bug_note(verb='ending', func=func)
     
 
 def cl_change_user(context, users, accounts, **kwargs):
     func = 'cl_change_user'    
     #bug_note(verb='starting', func=func)
-    print('Changing User')
+    print((' ' * 10) + 'Changing User')
     # do some of the things
     context['current_user_id'] = users[0]['user_id']
     get_cur_user_info(context, users)
@@ -145,7 +166,7 @@ def cl_change_account(context, accounts, entries, **kwargs):
     func = 'cl_change_account'    
     #bug_note(verb='starting', func=func)
     # do some of the things
-    print('Changing Account')
+    print((' ' * 10) + 'Changing Account')
     context['current_account_id'] = accounts[0]['account_id']
     get_cur_account_info(context, accounts)
     get_cur_account_entries(context, entries)
@@ -199,7 +220,9 @@ def cl_save_file(context, users, accounts, entries, **kwargs):
 def cl_gtfo(context, **kwargs):
     func = 'cl_gtfo'    
     bug_note(verb='starting', func=func)
+    star_line()
     print('User selected \'exit\'')
+    star_line()
     raise UserExitException
 
 
@@ -226,17 +249,17 @@ def init_command_list():
     func = 'init_command_list'    
     # bug_note(verb='starting', func=func)
     setcommands = {
-        '1': (cl_view_balance, 'View Balance'),
-        '2': (cl_record_debit, 'Make Deposit'),
-        '3': (cl_record_credit, 'Withdraw Funds'),
-        '4': (cl_change_user, 'Change User'),
-        '5': (cl_change_account, 'Change Account'),
-        'C': (cl_get_users_info, 'Check Users Data'),
-        'A': (cl_get_accounts_info, 'Check Accounts Data'),
-        'T': (cl_get_entries_info, 'Check entries Data'),
-        'D': (cl_dictionary_info, 'Check Dictionary Data'),
-        'S': (cl_save_file, 'Save File'),
-        'X': (cl_gtfo, 'Exit')
+        '1': (cl_view_balance, 'View Balance', True),
+        '2': (cl_record_debit, 'Make Deposit', True),
+        '3': (cl_record_credit, 'Withdraw Funds', True),
+        '4': (cl_change_user, 'Change User', True),
+        '5': (cl_change_account, 'Change Account', True),
+        'C': (cl_get_users_info, 'Check Users Data', False),
+        'A': (cl_get_accounts_info, 'Check Accounts Data', False),
+        'T': (cl_get_entries_info, 'Check Entries Data', False),
+        'D': (cl_dictionary_info, 'Check Dictionary Data', False),
+        'S': (cl_save_file, 'Save File', False),
+        'X': (cl_gtfo, 'Exit', True)
         # ...
     }
     # bug_note(verb='ending', func=func)
@@ -252,7 +275,7 @@ def init_context():
         'current_user_info': {},
         'current_users_accounts': [],
         'current_account_info': {},
-        'current_entries': {},
+        'current_entries': [],
     } 
     # bug_note(verb='ending', func=func)
     return setcontext              
@@ -275,6 +298,7 @@ def main():
                 #print('DEBUG no current user')
                 do_command = '4'
             else:
+                star_line()
                 #print('DEBUG found current user')
                 #cur_user_info = get_cur_user_info(context['current_user_id'], users)
                 current_user_info = context['current_user_info']
@@ -294,20 +318,19 @@ def main():
                         current_account_info['account_type'], current_account_info['account_ref_name']))
                     #print(cur_user_info)                
             if not do_command:
+                star_line()
                 print('\n\n')
-                for command, (fn, desc) in commands.items():
-                    print(f'{command:>20s}) {desc}')
+                for command, (fn, desc, show) in commands.items():
+                    if show:
+                        print(f'{command:>20s}) {desc}')
                 print('\n')
+                star_line()
                 do_command = input('Enter the thing to do: ')
                 print('\n\n')
             fn = commands.get(do_command, (unknown, "Unknown"))
             print(f'DEBUG: Selected fn == {fn[1]}')
             fn = fn[0]
-            fn(
-                context=context, users=users, accounts=accounts, entries=entries #,
-                #current_user_info=current_user_info, current_users_accounts=current_users_accounts,
-                #current_account_info=current_account_info, current_entries=current_entries
-            )
+            fn(context=context, users=users, accounts=accounts, entries=entries)
             do_command = False
             bug_note(verb='reiterating', func=func)
             #bug_note(verb='reiterating', func=func, current_user_info=context['current_user_info'], current_account_info=context['current_account_info'])
@@ -315,7 +338,7 @@ def main():
     except Exception as e:
         print('EXCEPTION RAISED')
         print(e)
-        print(context)
+        # print(context)
 
     bug_note(verb='ending', func=func)
         
