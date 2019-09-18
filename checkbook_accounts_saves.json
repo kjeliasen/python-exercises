@@ -10,9 +10,9 @@
   ],
   "accounts": [
     {
-      "acct_id": "1",
-      "acct_type": "Testing",
-      "acct_ref_name": "Test",
+      "account_id": "1",
+      "account_type": "Testing",
+      "account_ref_name": "Test",
       "user_id": "000"
     }
   ],
@@ -20,7 +20,7 @@
     {
       "trans_id": "1568729124.8222458",
       "user_id": "000",
-      "acct_id": "0",
+      "account_id": "0",
       "date_recorded": "2019-09-01",
       "amount": "0",
       "description": "Open Account",
