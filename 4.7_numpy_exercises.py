@@ -66,12 +66,12 @@ print(f'The {len(get_positives(a))} positives in a: \n{get_positives(a)}\n')
 
 # How many even positive numbers are there?
 
-print(f'Even positives: \n{len(get_even_positives(a))}\n')
+print(f'The {len(get_even_positives(a))} even positives: \n{get_even_positives(a)}\n')
 
 
 # If you were to add 3 to each data point, how many positive numbers would there be?
 
-print(f'Positives after adding 3: \n{len(get_positives(a + 3))}\n')
+print(f'The {len(get_positives(a + 3))} positives after adding 3: \n{get_positives(a + 3)}\n')
 
 
 # If you squared each number, what would the new mean and standard deviation be?
@@ -165,14 +165,14 @@ print(f'Squares of a: \n{squares_of_a}\n')
 
 odds_in_a = get_odds(a)
 
-print(f'Odds in a: \n{odds_in_a}\n')
+print(f'The {len(odds_in_a)} odds in a: \n{odds_in_a}\n')
 
 
 # Exercise 8 - Make a variable named evens_in_a. It should hold only the evens.
 
 evens_in_a = get_evens(a)
 
-print(f'Evens in a: \n{get_evens(a)}\n')
+print(f'The {len(evens_in_a)}  evens in a: \n{evens_in_a}\n')
 
 
 # What about life in two dimensions? A list of lists is matrix, a table, a 
@@ -267,7 +267,7 @@ print(f'Squares of b: \n{squares_of_b}\n')
 
 odds_in_b = get_odds(b)
 
-print(f'Odds in b: \n{odds_in_b}\n')
+print(f'The {len(odds_in_b)} odds in b: \n{odds_in_b}\n')
 
 
 # Exercise 8 - refactor the following to use numpy to filter only the even numbers
@@ -280,7 +280,7 @@ print(f'Odds in b: \n{odds_in_b}\n')
 
 evens_in_b = get_evens(b)
 
-print(f'Odds in b: \n{evens_in_b}\n')
+print(f'The {len(evens_in_b)} evens in b: \n{evens_in_b}\n')
 
 
 # Exercise 9 - print out the shape of the array b.
@@ -297,13 +297,13 @@ print(f'Transposed b: \n{b.T}')
 
 b_reshape = b.reshape(1, 6)
 
-print(f'Reshaped b: \n{b_reshape}\n')
+print(f'Reshaped b to {np.shape(b_reshape)}: \n{b_reshape}\n')
 
 # Exercise 12 - reshape the array b to be a list of 6 lists, each containing only 1 number (6 x 1)
 
 b_listed = b.reshape(6,1).tolist()
 
-print(f'Listed elements of b: \n{b_listed}\n')
+print(f'Listed elements of b shaped as {np.shape(b_listed)}: \n{b_listed}\n')
 
 ## Setup 3
 print_header('Setup 3')
@@ -409,8 +409,11 @@ print(f'Cosines of d: \n{d_cosine.round(8)}\n')
 # Exercise 3 - Find the tangent of all the numbers in d
 
 d_tangent = np.tan(d_rads)
+d_tangent = d_tangent.clip(-100, 100)
 
-print(f'Tangents of d: \n{d_tangent.round(8)}\n')
+print(f'Tangents of d (capped at +\\-100): \n{d_tangent.round(8)}\n')
+#print(f'\nData Type of d_tangent: {type(d_tangent[0][0])}')
+#print(f'\nData Type of d_sine: {type(d_sine[0][0])}')
 
 
 # Exercise 4 - Find all the negative numbers in d
@@ -425,10 +428,13 @@ print(f'Positives in d: \n{get_positives(d)}\n')
 
 # Exercise 6 - Return an array of only the unique numbers in d.
 
+unique_d = np.unique(d)
+
 
 
 # Exercise 7 - Determine how many unique numbers there are in d.
 
+print(f'The {len(unique_d)} unique values in d: \n{unique_d}\n')
 
 
 # Exercise 8 - Print out the shape of d.
@@ -438,9 +444,12 @@ print(f'Shape of d: \n{np.shape(d)}\n')
 
 # Exercise 9 - Transpose and then print out the shape of d.
 
-print(f'Transposed d: \n{d.T}')
+print(f'Transposed d: \n{d.T}\n')
 
 
 # Exercise 10 - Reshape d into an array of 9 x 2
 
+d_reshape = d.reshape(9, 2)
+
+print(f'Reshaped d: \n{d_reshape}\n')
 
