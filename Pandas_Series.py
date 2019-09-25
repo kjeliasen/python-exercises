@@ -514,21 +514,15 @@ task_4e = '4.e. Create a bar plot of the frequencies of the 6 most frequently oc
 
 print_title(task_4e)
 
-top_six_count = Letters_list[5]
-Top_six_letters = Letters_list[Letters_list >= top_six_count]
+#top_six_count = Letters_list[5]
+#Top_six_letters = Letters_list[Letters_list >= top_six_count]
 print(fancify('Top Six Letters'))
+Top_six_letters = Letters_list[Letters_list >= Letters_list[5]]
 print(Top_six_letters)
-top_six_string = ''.join(list(Top_six_letters.index))
-in_top_six = lambda x: x in Top_six_letters.index
-Series4_top_six = Series4[Series4.apply(in_top_six)]
-#print(fancify('Occurrances in Series4'))
-#print(Series4_top_six)
-#print()
-
-#Series4_top_six.plot()
-Top_six_letters.plot.bar()
+#top_six_string = ''.join(list(Top_six_letters.index))
+#Top_six_letters.plot.bar()
+Letters_list[Letters_list >= Letters_list[5]].plot.bar()
 plt.show()
-
 
 # In[ ]:
 
