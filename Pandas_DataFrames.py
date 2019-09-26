@@ -54,6 +54,11 @@ def clear_screen():
 #print_rule('This\nis\nrule\ntext')
 
 clear_screen()
+
+###############################################################################
+###############################################################################
+###############################################################################
+
 print_title('Exercises')
 print_rule(
 '''For several of the following exercises, you'll need to load several datasets 
@@ -70,6 +75,10 @@ argument.
 
 # All the datasets loaded from the pydataset library will be pandas dataframes.''',
 intro_fancy, False,)
+
+###############################################################################
+###############################################################################
+###############################################################################
 
 print_title('Problem 1', title_fancy, True, False)
 print_rule('Copy the code from the lesson to create a dataframe full of student grades.', intro_fancy, False)
@@ -128,6 +137,10 @@ grades.''')
 df['overall_grade'] = (df['english'] + df['math'] + df['reading']) / 3
 
 print(df)
+
+###############################################################################
+###############################################################################
+###############################################################################
 
 print_title('''Problem 2''', title_fancy, True, False)
 
@@ -197,6 +210,10 @@ dodge_max_mileage = mpg[mpg.manufacturer == 'dodge'].average_mileage.max()
 dodge_min_mileage = mpg[mpg.manufacturer == 'dodge'].average_mileage.min()
 
 print(mpg[((mpg.manufacturer == 'dodge') & ((mpg.average_mileage == dodge_max_mileage) | (mpg.average_mileage == dodge_min_mileage)))].sort_values(by='average_mileage', ascending=False))
+
+###############################################################################
+###############################################################################
+###############################################################################
 
 print_title('Problem 3', title_fancy, True, False)
 

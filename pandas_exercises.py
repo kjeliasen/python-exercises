@@ -3,7 +3,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import pandas as pd
-#from env import host, user, password
+from env import host, user, password
 
 #url = f'mysql+pymysql://{user}:{password}@{host}/employees'
 
@@ -59,6 +59,10 @@ def clear_screen():
 
 clear_screen()
 
+###############################################################################
+###############################################################################
+###############################################################################
+
 print_title('Exercises')
 print_rule(
 '''Create a notebook or python script named pandas_exercises to do your work in 
@@ -79,6 +83,10 @@ print_rule(
 # data('mpg', show_doc=True) # view the documentation for the dataset''', code_fancy)
 
 
+###############################################################################
+###############################################################################
+###############################################################################
+
 print_title(
 '''mpg dataset''', title_fancy, True, False)
 print_rule(
@@ -92,71 +100,139 @@ data('mpg', show_doc=True)
 
 print('\n' + intro_fancy + str(mpg.sample(10)) + Style.RESET_ALL)
 
-#print(mpg.docs_dict)
-
 print_rule('''On average, which manufacturer has the best miles per gallon?''')
 
-mfg_qry = '''SELECT
-    manufacturer,
+mpg['avg_mileage'] = (mpg.cty + mpg.hwy) / 2
+mpg_mfg = mpg.groupby('manufacturer').avg_mileage.agg(['count', 'mean', 'min', 'max']).sort_values(by='mean', ascending=False)
 
-'''
-mfg_mpg = ''
+print('\n' + header_fancy + 'mileage by manufacturer' + Style.RESET_ALL)
+print(mpg_mfg)
+
 
 print_rule('''How many different manufacturers are there?''')
 
-
+print(f'{Fore.CYAN}There are {Style.BRIGHT}{len(mpg_mfg)}{Style.NORMAL} different manufacturers{Style.RESET_ALL}')
 
 print_rule('''How many different models are there?''')
 
+mpg_models = mpg.groupby(['manufacturer', 'model']).hwy.agg('count')
 
+print('\n' + header_fancy + 'manufacturers and models' + Style.RESET_ALL)
+
+print(mpg_models)
+
+print(f'\n{Fore.CYAN}There are {Style.BRIGHT}{len(mpg_models)}{Style.NORMAL} different models{Style.RESET_ALL}')
 
 print_rule('''Do automatic or manual cars have better miles per gallon?''')
 
+go_to_paren = lambda x:  x[0:x.index('(')]
+mpg['trans_cat'] = mpg['trans'].apply(go_to_paren)
 
+mpg_trans = mpg.groupby('trans_cat').avg_mileage.agg(['count','mean','min','max'])
+
+print(mpg_trans)
+
+###############################################################################
+###############################################################################
+###############################################################################
 
 print_title('''Joining and Merging''', title_fancy, True, False)
 print_rule('''Copy the users and roles dataframes from the examples above.''', intro_fancy, False )
 
+users = pd.DataFrame({
+    'id': [1, 2, 3, 4, 5, 6],
+    'name': ['bob', 'joe', 'sally', 'adam', 'jane', 'mike'],
+    'role_id': [1, 2, 3, 3, np.nan, np.nan]
+})
+roles = pd.DataFrame({
+    'id': [1, 2, 3, 4],
+    'name': ['admin', 'author', 'reviewer', 'commenter']
+})
+roles
+print(intro_fancy + Style.BRIGHT + 'users' + Style.RESET_ALL)
+print(intro_fancy + str(users) + Style.RESET_ALL)
+print()
+print(intro_fancy + Style.BRIGHT + 'roles' + Style.RESET_ALL)
+print(intro_fancy + str(roles) + Style.RESET_ALL)
 
 
 print_rule('''What do you think a right join would look like? An outer join?''' )
 
+join_right = pd.merge(users, roles, left_on='role_id', right_on='id', how='right')
+join_outer = pd.merge(users, roles, left_on='role_id', right_on='id', how='outer')
+
+print(header_fancy + 'right join' + Style.RESET_ALL)
+print(join_right)
+print('\n' + header_fancy + 'outer join' + Style.RESET_ALL)
+print(join_outer)
 
 
 print_rule('''What happens if you drop the foreign keys from the dataframes and try to merge 
 them?''')
 
+join_chaos = pd.merge(users, roles)
+print(header_fancy + 'chaos join' + Style.RESET_ALL)
+print(join_chaos)
 
+###############################################################################
+###############################################################################
+###############################################################################
 
 print_title('''Getting data from SQL databases''', title_fancy, True, False)
 print_rule('''Create a function named get_db_url. It should accept a username, hostname, 
 password, and database name and return a url formatted like in the examples in 
 this lesson.''', intro_fancy, False)
 
+
+def get_db_url(user, password, host, database):
+    return f'mysql+pymysql://{user}:{password}@{host}/{database}'
+
+
+print(f'{Style.BRIGHT}{Fore.YELLOW}def get_db_url{Fore.WHITE}({Fore.CYAN}user{Fore.WHITE}, \
+{Fore.CYAN}host{Fore.WHITE}, {Fore.CYAN}password{Fore.WHITE}, {Fore.CYAN}table{Fore.WHITE}):')
+print(f'    {Fore.MAGENTA}return {Fore.CYAN}f{Fore.RED}\'mysql+pymysql://{Fore.CYAN}\173\
+{Fore.WHITE}user{Fore.CYAN}\175{Fore.RED}:{Fore.CYAN}\173{Fore.WHITE}password{Fore.CYAN}\
+\175{Fore.RED}@{Fore.CYAN}\173{Fore.WHITE}host{Fore.CYAN}\175{Fore.RED}/{Fore.CYAN}\
+\173{Fore.WHITE}database{Fore.CYAN}\175{Fore.RED}\'{Style.RESET_ALL}')
+
 print_rule('''Use your function to obtain a connection to the employees database.''')
 
+emps_url = get_db_url(user, password, host, 'employees')
+#print(emps_url)
 
+employees = pd.read_sql('SELECT * FROM employees', emps_url)
 
-print_rule('''Once you have successfully run a query:''')
+print(header_fancy + 'employees table' + Style.RESET_ALL)
+print(employees.sample(10))
+
+print_rule('''Once you have successfully run a query:''', intro_fancy, True, False)
 
 
 
 print_rule('''Intentionally make a typo in the database url. What kind of error message 
 do you see?''')
 
-
+print(fancify('One shit-ton of error messages', header_fancy))
 
 print_rule('''Intentionally make an error in your SQL query. What does the error message 
 look like?''')
 
+#emps2 = pd.read_sql('SELECT * FROM employee', emps_url)
+print(fancify('Another shit-ton of error messages', header_fancy))
 
 
 print_rule('''Read the employees and titles tables into two separate dataframes''')
 
+titles = pd.read_sql('SELECT * FROM titles', emps_url)
+print(header_fancy + 'titles table' + Style.RESET_ALL)
+print(titles.sample(10))
 
 
 print_rule('''Visualize the number of employees with each title.''')
 
+title_counts = pd.read_sql('SELECT title, COUNT(*) employees FROM titles WHERE to_date > NOW() GROUP BY title ORDER BY employees DESC', emps_url)
+print(header_fancy + 'employees by title' + Style.RESET_ALL)
+print(title_counts)
 
 
 print_rule('''Join the employees and titles dataframes together.''')
@@ -175,6 +251,12 @@ with that title.''')
 print_rule('''Write the code necessary to create a cross tabulation of the number of titles 
 by department. (Hint: this will involve a combination of SQL and python/pandas 
 code)''')
+
+
+
+###############################################################################
+###############################################################################
+###############################################################################
 
 print_title('''get_db_url''', title_fancy, True, False)
 print_rule(
