@@ -222,6 +222,9 @@ employees = pd.read_sql('SELECT * FROM employees', emps_url)
 
 print(header_fancy + 'employees table' + Style.RESET_ALL)
 print(employees.sample(10))
+print()
+print(header_fancy + 'employees details - ' + str(employees.shape) + Style.RESET_ALL)
+print(employees.dtypes)
 
 ###############################################################################
 
@@ -244,30 +247,36 @@ print(fancify('Another shit-ton of error messages', header_fancy))
 
 print_rule('''Read the employees and titles tables into two separate dataframes''')
 
-titles = pd.read_sql('SELECT emp_no, title, from_date, (case when to_date > now() then date(\'2199-12-31\') else to_date end) to_date FROM titles', emps_url)
+titles = pd.read_sql('SELECT emp_no, title, from_date, (case when to_date > now() then date(now())+1 else to_date end) to_date FROM titles', emps_url)
 print(header_fancy + 'titles table' + Style.RESET_ALL)
 print(titles.sample(10))
-
+print()
+print(header_fancy + 'titles details - ' + str(titles.shape) + Style.RESET_ALL)
+print(titles.dtypes)
 
 ###############################################################################
 
 print_rule('''Visualize the number of employees with each title.''')
 
 #title_counts = pd.read_sql('SELECT title, COUNT(*) employees FROM titles WHERE to_date > NOW() GROUP BY title ORDER BY employees DESC', emps_url)
-date_today = np.datetime64('today')
+date_today = pd.Timestamp(np.datetime64('today'))
 max_to_date = titles.to_date.max()
-print('Max Date:', max_to_date, type(max_to_date))
-max_to_date = np.datetime64(max_to_date)
-print('Max Date New:', max_to_date, type(max_to_date))
+print('Today\'s Date:', date_today, type(date_today))
+max_to_date = pd.Timestamp(max_to_date)
+print('Max To Date:', max_to_date, type(max_to_date))
 
-print('Max Date - Today:', max_to_date - date_today, type((max_to_date - date_today)))
+#print('Max Date - Today:', max_to_date - date_today, type((max_to_date - date_today)))
 
-titles['date_from'] = pd.to_datetime(titles.from_date)
-titles['date_to'] = pd.to_datetime(titles.to_date)
-titles['is_current'] = titles.date_to > date_today
-#print(titles.dtypes)
-#print(header_fancy + 'titles table' + Style.RESET_ALL)
-#print(titles.sample(10))
+titles.from_date = pd.to_datetime(titles.from_date)  
+titles.to_date = pd.to_datetime(titles.to_date)  
+titles['is_current'] = titles.to_date > date_today
+titles['tenure'] = titles.to_date - titles.from_date
+titles['tenure'] = titles.tenure.apply(lambda x: x.days)
+print(header_fancy + 'titles table' + Style.RESET_ALL)
+print(titles.sample(10))
+print()
+print(header_fancy + 'titles details - ' + str(titles.shape) + Style.RESET_ALL)
+print(titles.dtypes)
 #print(titles.dtypes)
 #print(header_fancy + 'titles table' + Style.RESET_ALL)
 #print(titles.sample(10))
@@ -279,7 +288,7 @@ titles['is_current'] = titles.date_to > date_today
 
 print_rule('''Join the employees and titles dataframes together.''')
 
-
+employees_titles = pd.merge(employees)
 
 ###############################################################################
 
