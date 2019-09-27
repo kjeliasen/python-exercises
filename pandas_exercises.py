@@ -4,6 +4,7 @@ import math
 import matplotlib.pyplot as plt
 import pandas as pd
 from env import host, user, password
+import datetime as dt
 
 #url = f'mysql+pymysql://{user}:{password}@{host}/employees'
 
@@ -80,7 +81,8 @@ view the documentation for the data set by passing the show_doc keyword
 argument.''', intro_fancy, False, False)
 print_rule(
 '''mpg = data('mpg') # load the dataset and store it in a variable
-# data('mpg', show_doc=True) # view the documentation for the dataset''', code_fancy)
+# data('mpg', show_doc=True) # view the documentation for the dataset'''
+, code_fancy)
 
 
 ###############################################################################
@@ -100,10 +102,14 @@ data('mpg', show_doc=True)
 
 print('\n' + intro_fancy + str(mpg.sample(10)) + Style.RESET_ALL)
 
+###############################################################################
+
 print_rule('''On average, which manufacturer has the best miles per gallon?''')
 
 mpg['avg_mileage'] = (mpg.cty + mpg.hwy) / 2
 mpg_mfg = mpg.groupby('manufacturer').avg_mileage.agg(['count', 'mean', 'min', 'max']).sort_values(by='mean', ascending=False)
+
+###############################################################################
 
 print('\n' + header_fancy + 'mileage by manufacturer' + Style.RESET_ALL)
 print(mpg_mfg)
@@ -111,7 +117,11 @@ print(mpg_mfg)
 
 print_rule('''How many different manufacturers are there?''')
 
+###############################################################################
+
 print(f'{Fore.CYAN}There are {Style.BRIGHT}{len(mpg_mfg)}{Style.NORMAL} different manufacturers{Style.RESET_ALL}')
+
+###############################################################################
 
 print_rule('''How many different models are there?''')
 
@@ -122,6 +132,8 @@ print('\n' + header_fancy + 'manufacturers and models' + Style.RESET_ALL)
 print(mpg_models)
 
 print(f'\n{Fore.CYAN}There are {Style.BRIGHT}{len(mpg_models)}{Style.NORMAL} different models{Style.RESET_ALL}')
+
+###############################################################################
 
 print_rule('''Do automatic or manual cars have better miles per gallon?''')
 
@@ -155,6 +167,7 @@ print()
 print(intro_fancy + Style.BRIGHT + 'roles' + Style.RESET_ALL)
 print(intro_fancy + str(roles) + Style.RESET_ALL)
 
+###############################################################################
 
 print_rule('''What do you think a right join would look like? An outer join?''' )
 
@@ -166,6 +179,7 @@ print(join_right)
 print('\n' + header_fancy + 'outer join' + Style.RESET_ALL)
 print(join_outer)
 
+###############################################################################
 
 print_rule('''What happens if you drop the foreign keys from the dataframes and try to merge 
 them?''')
@@ -188,12 +202,16 @@ def get_db_url(user, password, host, database):
     return f'mysql+pymysql://{user}:{password}@{host}/{database}'
 
 
-print(f'{Style.BRIGHT}{Fore.YELLOW}def get_db_url{Fore.WHITE}({Fore.CYAN}user{Fore.WHITE}, \
-{Fore.CYAN}host{Fore.WHITE}, {Fore.CYAN}password{Fore.WHITE}, {Fore.CYAN}table{Fore.WHITE}):')
-print(f'    {Fore.MAGENTA}return {Fore.CYAN}f{Fore.RED}\'mysql+pymysql://{Fore.CYAN}\173\
-{Fore.WHITE}user{Fore.CYAN}\175{Fore.RED}:{Fore.CYAN}\173{Fore.WHITE}password{Fore.CYAN}\
-\175{Fore.RED}@{Fore.CYAN}\173{Fore.WHITE}host{Fore.CYAN}\175{Fore.RED}/{Fore.CYAN}\
-\173{Fore.WHITE}database{Fore.CYAN}\175{Fore.RED}\'{Style.RESET_ALL}')
+print(f'{Style.BRIGHT}{Fore.CYAN}def {Fore.YELLOW}get_db_url{Fore.WHITE}(\
+{Fore.CYAN}user{Fore.WHITE}, {Fore.CYAN}host{Fore.WHITE}, \
+{Fore.CYAN}password{Fore.WHITE}, {Fore.CYAN}table{Fore.WHITE}):')
+print(f'    {Fore.MAGENTA}return {Fore.CYAN}f{Fore.RED}\'mysql+pymysql://\
+{Fore.CYAN}\173{Fore.WHITE}user{Fore.CYAN}\175{Fore.RED}:{Fore.CYAN}\173\
+{Fore.WHITE}password{Fore.CYAN}\175{Fore.RED}@{Fore.CYAN}\173{Fore.WHITE}host\
+{Fore.CYAN}\175{Fore.RED}/{Fore.CYAN}\173{Fore.WHITE}database{Fore.CYAN}\175\
+{Fore.RED}\'{Style.RESET_ALL}')
+
+###############################################################################
 
 print_rule('''Use your function to obtain a connection to the employees database.''')
 
@@ -205,14 +223,16 @@ employees = pd.read_sql('SELECT * FROM employees', emps_url)
 print(header_fancy + 'employees table' + Style.RESET_ALL)
 print(employees.sample(10))
 
+###############################################################################
+
 print_rule('''Once you have successfully run a query:''', intro_fancy, True, False)
-
-
 
 print_rule('''Intentionally make a typo in the database url. What kind of error message 
 do you see?''')
 
 print(fancify('One shit-ton of error messages', header_fancy))
+
+###############################################################################
 
 print_rule('''Intentionally make an error in your SQL query. What does the error message 
 look like?''')
@@ -220,33 +240,61 @@ look like?''')
 #emps2 = pd.read_sql('SELECT * FROM employee', emps_url)
 print(fancify('Another shit-ton of error messages', header_fancy))
 
+###############################################################################
 
 print_rule('''Read the employees and titles tables into two separate dataframes''')
 
-titles = pd.read_sql('SELECT * FROM titles', emps_url)
+titles = pd.read_sql('SELECT emp_no, title, from_date, (case when to_date > now() then date(\'2199-12-31\') else to_date end) to_date FROM titles', emps_url)
 print(header_fancy + 'titles table' + Style.RESET_ALL)
 print(titles.sample(10))
 
 
+###############################################################################
+
 print_rule('''Visualize the number of employees with each title.''')
 
-title_counts = pd.read_sql('SELECT title, COUNT(*) employees FROM titles WHERE to_date > NOW() GROUP BY title ORDER BY employees DESC', emps_url)
-print(header_fancy + 'employees by title' + Style.RESET_ALL)
-print(title_counts)
+#title_counts = pd.read_sql('SELECT title, COUNT(*) employees FROM titles WHERE to_date > NOW() GROUP BY title ORDER BY employees DESC', emps_url)
+date_today = np.datetime64('today')
+max_to_date = titles.to_date.max()
+print('Max Date:', max_to_date, type(max_to_date))
+max_to_date = np.datetime64(max_to_date)
+print('Max Date New:', max_to_date, type(max_to_date))
 
+print('Max Date - Today:', max_to_date - date_today, type((max_to_date - date_today)))
+
+titles['date_from'] = pd.to_datetime(titles.from_date)
+titles['date_to'] = pd.to_datetime(titles.to_date)
+titles['is_current'] = titles.date_to > date_today
+#print(titles.dtypes)
+#print(header_fancy + 'titles table' + Style.RESET_ALL)
+#print(titles.sample(10))
+#print(titles.dtypes)
+#print(header_fancy + 'titles table' + Style.RESET_ALL)
+#print(titles.sample(10))
+
+#print(header_fancy + 'employees by title' + Style.RESET_ALL)
+#print(title_counts)
+
+###############################################################################
 
 print_rule('''Join the employees and titles dataframes together.''')
 
 
 
+###############################################################################
+
 print_rule('''Visualize how frequently employees change titles.''')
 
 
+
+###############################################################################
 
 print_rule('''For each title, find the hire date of the employee that was hired most recently 
 with that title.''')
 
 
+
+###############################################################################
 
 print_rule('''Write the code necessary to create a cross tabulation of the number of titles 
 by department. (Hint: this will involve a combination of SQL and python/pandas 
@@ -259,19 +307,27 @@ code)''')
 ###############################################################################
 
 print_title('''get_db_url''', title_fancy, True, False)
+
+###############################################################################
+
 print_rule(
 '''Use your get_db_url function to help you explore the data from the chipotle 
 database. Use the data to answer the following questions:''', intro_fancy, False)
 
 
 
+###############################################################################
+
 print_rule('''What is the total price for each order?''')
 
 
 
+###############################################################################
+
 print_rule('''What are the most popular 3 items?''')
 
 
+###############################################################################
 
 print_rule('''Which item has produced the most revenue?''')
 
