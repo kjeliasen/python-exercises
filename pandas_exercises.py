@@ -55,6 +55,18 @@ def clear_screen():
     print('\033[2J')
 
 
+def dataframe_splain(dataframe, use_name='sample'):
+    sample_size=min(11,len(dataframe))
+    print(f'{header_fancy}{use_name.upper()} DATA{Style.RESET_ALL}')
+    if sample_size == 11:
+        print(dataframe.sample(10))
+    else:
+        print(dataframe)
+    print()
+    print(f'{header_fancy}{use_name} details{str(dataframe.shape)}{Style.RESET_ALL}')
+    print(dataframe.dtypes)
+
+
 #print_title('Title_goes_here')
 #print_rule('This\nis\nrule\ntext')
 
@@ -160,12 +172,10 @@ roles = pd.DataFrame({
     'id': [1, 2, 3, 4],
     'name': ['admin', 'author', 'reviewer', 'commenter']
 })
-roles
-print(intro_fancy + Style.BRIGHT + 'users' + Style.RESET_ALL)
-print(intro_fancy + str(users) + Style.RESET_ALL)
+
+dataframe_splain(users,'users')
 print()
-print(intro_fancy + Style.BRIGHT + 'roles' + Style.RESET_ALL)
-print(intro_fancy + str(roles) + Style.RESET_ALL)
+dataframe_splain(roles,'roles')
 
 ###############################################################################
 
@@ -220,11 +230,13 @@ emps_url = get_db_url(user, password, host, 'employees')
 
 employees = pd.read_sql('SELECT * FROM employees', emps_url)
 
-print(header_fancy + 'employees table' + Style.RESET_ALL)
-print(employees.sample(10))
-print()
-print(header_fancy + 'employees details - ' + str(employees.shape) + Style.RESET_ALL)
-print(employees.dtypes)
+
+dataframe_splain(employees,'employees')
+# print(header_fancy + 'employees table' + Style.RESET_ALL)
+# print(employees.sample(10))
+# print()
+# print(header_fancy + 'employees details - ' + str(employees.shape) + Style.RESET_ALL)
+# print(employees.dtypes)
 
 ###############################################################################
 
@@ -248,11 +260,13 @@ print(fancify('Another shit-ton of error messages', header_fancy))
 print_rule('''Read the employees and titles tables into two separate dataframes''')
 
 titles = pd.read_sql('SELECT emp_no, title, from_date, (case when to_date > now() then date(now())+1 else to_date end) to_date FROM titles', emps_url)
-print(header_fancy + 'titles table' + Style.RESET_ALL)
-print(titles.sample(10))
-print()
-print(header_fancy + 'titles details - ' + str(titles.shape) + Style.RESET_ALL)
-print(titles.dtypes)
+
+dataframe_splain(titles, 'titles')
+# print(header_fancy + 'titles table' + Style.RESET_ALL)
+# print(titles.sample(10))
+# print()
+# print(header_fancy + 'titles details - ' + str(titles.shape) + Style.RESET_ALL)
+# print(titles.dtypes)
 
 ###############################################################################
 
@@ -272,14 +286,8 @@ titles.to_date = pd.to_datetime(titles.to_date)
 titles['is_current'] = titles.to_date > date_today
 titles['tenure'] = titles.to_date - titles.from_date
 titles['tenure'] = titles.tenure.apply(lambda x: x.days)
-print(header_fancy + 'titles table' + Style.RESET_ALL)
-print(titles.sample(10))
-print()
-print(header_fancy + 'titles details - ' + str(titles.shape) + Style.RESET_ALL)
-print(titles.dtypes)
-#print(titles.dtypes)
-#print(header_fancy + 'titles table' + Style.RESET_ALL)
-#print(titles.sample(10))
+
+dataframe_splain(titles, 'titles')
 
 #print(header_fancy + 'employees by title' + Style.RESET_ALL)
 #print(title_counts)
@@ -288,7 +296,12 @@ print(titles.dtypes)
 
 print_rule('''Join the employees and titles dataframes together.''')
 
-employees_titles = pd.merge(employees)
+employees_titles = pd.merge(
+    employees, 
+    titles.rename(columns={'emp_id':'emp_id_t'}), 
+    left_on='emp_id', right_on='emp_id_t', how='inner')
+
+dataframe_splain(titles, 'titles')
 
 ###############################################################################
 
