@@ -55,10 +55,9 @@ def clear_screen():
     print('\033[2J')
 
 
-def dataframe_splain(dataframe, use_name='sample'):
-    sample_size=min(11,len(dataframe))
+def dataframe_splain(dataframe, use_name='sample', sample_limit=10):
     print(f'{header_fancy}{use_name.upper()} DATA{Style.RESET_ALL}')
-    if sample_size == 11:
+    if sample_limit and len(dataframe) > sample_limit:
         print(dataframe.sample(10))
     else:
         print(dataframe)
@@ -124,8 +123,7 @@ mpg_mfg = mpg.groupby('manufacturer').avg_mileage.agg(['count', 'mean', 'min', '
 ###############################################################################
 
 print('\n' + header_fancy + 'mileage by manufacturer' + Style.RESET_ALL)
-print(mpg_mfg)
-
+dataframe_splain(mpg_mfg, "mpg_mfg")
 
 print_rule('''How many different manufacturers are there?''')
 
@@ -298,10 +296,10 @@ print_rule('''Join the employees and titles dataframes together.''')
 
 employees_titles = pd.merge(
     employees, 
-    titles.rename(columns={'emp_id':'emp_id_t'}), 
-    left_on='emp_id', right_on='emp_id_t', how='inner')
+    titles.rename(columns={'emp_no':'emp_no_t'}), 
+    left_on='emp_no', right_on='emp_no_t', how='inner')
+dataframe_splain(employees_titles, 'employees_titles')
 
-dataframe_splain(titles, 'titles')
 
 ###############################################################################
 
