@@ -257,12 +257,21 @@ print(fancify('Another shit-ton of error messages', header_fancy))
 
 print_rule('''Read the employees and titles tables into two separate dataframes''')
 
-titles = pd.read_sql('SELECT emp_no, title, from_date, (case when to_date > now() then date(now())+1 else to_date end) to_date FROM titles', emps_url)
+titles = pd.read_sql('SELECT emp_no, title, from_date, (case when to_date > now() then date(now()) else to_date end) to_date FROM titles', emps_url)
+#dataframe_splain(titles, 'titles')
 
+date_today = pd.Timestamp(np.datetime64('today'))
+max_to_date = titles.to_date.max()
+# print('Today\'s Date:', date_today, type(date_today))
+max_to_date = pd.Timestamp(max_to_date)
+# print('Max To Date:', max_to_date, type(max_to_date))
+titles.from_date = pd.to_datetime(titles.from_date)  
+titles.to_date = pd.to_datetime(titles.to_date)  
+titles['is_current'] = titles.to_date >= date_today
+titles['tenure'] = titles.to_date - titles.from_date
+titles['tenure'] = titles.tenure.apply(lambda x: x.days)
 dataframe_splain(titles, 'titles')
-# print(header_fancy + 'titles table' + Style.RESET_ALL)
-# print(titles.sample(10))
-# print()
+
 # print(header_fancy + 'titles details - ' + str(titles.shape) + Style.RESET_ALL)
 # print(titles.dtypes)
 
@@ -271,22 +280,11 @@ dataframe_splain(titles, 'titles')
 print_rule('''Visualize the number of employees with each title.''')
 
 #title_counts = pd.read_sql('SELECT title, COUNT(*) employees FROM titles WHERE to_date > NOW() GROUP BY title ORDER BY employees DESC', emps_url)
-date_today = pd.Timestamp(np.datetime64('today'))
-max_to_date = titles.to_date.max()
-print('Today\'s Date:', date_today, type(date_today))
-max_to_date = pd.Timestamp(max_to_date)
-print('Max To Date:', max_to_date, type(max_to_date))
 
-#print('Max Date - Today:', max_to_date - date_today, type((max_to_date - date_today)))
-
-titles.from_date = pd.to_datetime(titles.from_date)  
-titles.to_date = pd.to_datetime(titles.to_date)  
-titles['is_current'] = titles.to_date > date_today
-titles['tenure'] = titles.to_date - titles.from_date
-titles['tenure'] = titles.tenure.apply(lambda x: x.days)
-
-dataframe_splain(titles, 'titles')
-
+current_titles = titles[titles.is_current]
+current_title_counts = current_titles.groupby('title').agg('title').count()
+dataframe_splain(current_title_counts,'current_title_counts')
+current_title_counts.plot.hist()
 #print(header_fancy + 'employees by title' + Style.RESET_ALL)
 #print(title_counts)
 
@@ -304,8 +302,16 @@ dataframe_splain(employees_titles, 'employees_titles')
 ###############################################################################
 
 print_rule('''Visualize how frequently employees change titles.''')
-
-
+current_employees = employees_titles[employees_titles.is_current]
+#dataframe_splain(current_employees, 'employees_titles')
+employees_max_date = employees_titles.groupby('emp_no').to_date.agg(['max','count'])
+#dataframe_splain(employees_max_date, 'employees_max_date')   
+employees_mean_tenure_prior = pd.DataFrame(employees_titles[employees_titles.is_current == False].groupby('emp_no').agg('tenure').mean())
+#dataframe_splain(employees_mean_tenure_prior, 'employees_mean_tenure_prior')   
+employees_mean_tenure_prior['tenure_years'] = employees_mean_tenure_prior.tenure / 365     
+mean_tenure_prior = employees_mean_tenure_prior['tenure_years']   
+dataframe_splain(mean_tenure_prior, 'mean_tenure_prior')   
+mean_tenure_prior.plot.bar()
 
 ###############################################################################
 

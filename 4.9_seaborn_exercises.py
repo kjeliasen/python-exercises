@@ -3,7 +3,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import pandas as pd
-from env import host, user, password
+import seaborn as sns
 import datetime as dt
 
 #url = f'mysql+pymysql://{user}:{password}@{host}/employees'
@@ -80,26 +80,44 @@ print_title('Exercises')
 print_rule('''Create a file named 4.9_seaborn_exercises.py for this exercise.''')
 
 
+###############################################################################
+###############################################################################
+###############################################################################
+
+print_title('Iris database')
 
 print_rule('''Use the iris database to answer the following quesitons:''')
 
+iris = data('iris')
+print(intro_fancy)
+data('iris', show_doc=True)
+print(Style.RESET_ALL)
 
+frame_splain(iris, 'iris')
 
 print_rule('''What does the distribution of petal lengths look like?''')
 
-
+sns.distplot(iris['Petal.Length'])
+plt.show()
 
 print_rule('''Is there a correlation between petal length and petal width?''')
 
-
+sns.jointplot(data=iris, x='Petal.Length', y='Petal.Width', kind='reg') 
+plt.show()
 
 print_rule('''Would it be reasonable to predict species based on sepal width and sepal 
 length?''')
 
+sns.relplot(data=iris, x='Sepal.Length', y='Sepal.Width', hue='Species')      
+plt.show()
 
 
 print_rule('''Which features would be best used to predict species?''')
 
+sns.pairplot(data=iris, hue='Species', kind='reg')  
+plt.show()
+
+print_rule('Best predictors are Petal Width and Petal Height', header_fancy)
 
 
 ###############################################################################
@@ -113,10 +131,14 @@ print_rule('''Using the lesson as an example, use seaborn's load_dataset functio
 the anscombe data set. Use pandas to group the data by the dataset column, 
 and calculate summary statistics for each dataset. What do you notice?''')
 
-
+ans = sns.load_dataset('anscombe')
+frame_splain(ans, 'anscombe')
 
 print_rule('''Plot the x and y values from the anscombe data. Each dataset should be in a 
 separate column.''')
+
+sns.relplot(data=ans, x='x', y='y', col='dataset', hue='dataset')
+plt.show()
 
 ###############################################################################
 ###############################################################################
@@ -127,7 +149,15 @@ print_title('Problem 2')
 print_rule('''Load the InsectSprays dataset and read it's documentation. Create a boxplot 
 that shows the effectiveness of the different insect sprays.''')
 
+InsectSprays = data('InsectSprays')
+print(intro_fancy)
+data('InsectSprays', show_doc=True)
+print(Style.RESET_ALL)
+frame_splain(InsectSprays, 'InsectSprays')
 
+sns.boxplot(data=InsectSprays, y='count', x='spray', hue='spray')
+plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+plt.show()
 
 ###############################################################################
 ###############################################################################
