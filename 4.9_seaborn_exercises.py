@@ -220,6 +220,21 @@ chp_url = get_db_url(user, password, host, 'chipotle')
 
 orders = pd.read_sql('SELECT * FROM orders', chp_url)
 frame_splain(orders, 'orders')
+orders['price_val'] = orders.item_price.apply(lambda x: float(x.replace('$','').replace(',','')))
+item_revenues = orders.groupby('item_name').price_val.agg(['count', 'sum']).sort_values(['count','sum'], ascending = False)
+item_revenues['item'] = item_revenues.index
+item_revenues = item_revenues.rename(columns={'count':'orders', 'sum':'revenues'})
+frame_splain(item_revenues, 'item_revenues')
+
+top_items = item_revenues[:4]
+frame_splain(top_items, 'top_items')
+
+pal = sns.color_palette("Blues_d", len(top_items))
+g=sns.barplot(x='item', y='orders', data=top_items)
+for index, row in top_items.iterrows():
+    g.annotate = (round(row.revenues,2))
+plt.show()
+
 
 
 ###############################################################################
