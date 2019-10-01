@@ -3,6 +3,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import pandas as pd
+from env import host, user, password
 import seaborn as sns
 import datetime as dt
 
@@ -64,6 +65,10 @@ def frame_splain(dataframe, use_name='sample', sample_limit=10):
     print()
     print(f'{header_fancy}{use_name} details{str(dataframe.shape)}{Style.RESET_ALL}')
     print(dataframe.dtypes)
+
+
+def get_db_url(user, password, host, database):
+    return f'mysql+pymysql://{user}:{password}@{host}/{database}'
 
 
 #print_title('Title_goes_here')
@@ -168,22 +173,38 @@ print_title('Problem 3')
 print_rule('''Load the swiss dataset and read it's documentation. Create visualizations to 
 answer the following questions:''')
 
+swiss = data('swiss')
+print(intro_fancy)
+data('swiss', show_doc=True)
+print(Style.RESET_ALL)
+frame_splain(swiss, 'swiss')
 
+sns.distplot(swiss.Catholic, bins=10)
+plt.show()
 
 print_rule('''Create an attribute named is_catholic that holds a boolean value of whether or 
 not the province is Catholic. 
 
 (Choose a cutoff point for what constitutes catholic)''')
 
-
+swiss['is_catholic'] = swiss.Catholic > 75
+frame_splain(swiss, "swiss", 0)
 
 print_rule('''Does whether or not a province is Catholic influence fertility?''')
 
+sns.boxplot(data=swiss, y='Fertility', x='is_catholic', hue='is_catholic')
+plt.show()
 
+print_rule('Yes, Catholicism correlates with fertility', header_fancy)
 
 print_rule('''What measure correlates most strongly with fertility?''')
 
+sns.heatmap(swiss.corr(), annot=True, cmap='Reds')
 
+#sns.pairplot(data=swiss, vars=['Fertility','Agriculture','Examination','Education','Catholic','Infant.Mortality'], kind='reg')
+sns.heatmap(swiss.corr(), annot=True, cmap='Reds')
+plt.show()
+print_rule('Education correlates most strongly with fertility', header_fancy)
 
 ###############################################################################
 ###############################################################################
@@ -194,6 +215,11 @@ print_title('Problem 4')
 print_rule('''Using the chipotle dataset from the previous exercise, create a bar chart that 
 shows the 4 most popular items and the revenue produced by each.''')
 
+chp_url = get_db_url(user, password, host, 'chipotle')
+#print(emps_url)
+
+orders = pd.read_sql('SELECT * FROM orders', chp_url)
+frame_splain(orders, 'orders')
 
 
 ###############################################################################

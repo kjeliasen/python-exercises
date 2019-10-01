@@ -284,7 +284,7 @@ print_rule('''Visualize the number of employees with each title.''')
 current_titles = titles[titles.is_current]
 current_title_counts = current_titles.groupby('title').agg('title').count()
 dataframe_splain(current_title_counts,'current_title_counts')
-current_title_counts.plot.hist()
+current_title_counts.plot.bar()
 #print(header_fancy + 'employees by title' + Style.RESET_ALL)
 #print(title_counts)
 
@@ -303,7 +303,7 @@ dataframe_splain(employees_titles, 'employees_titles')
 
 print_rule('''Visualize how frequently employees change titles.''')
 current_employees = employees_titles[employees_titles.is_current]
-#dataframe_splain(current_employees, 'employees_titles')
+#dataframe_splain(current_employees, 'current_employees')
 employees_max_date = employees_titles.groupby('emp_no').to_date.agg(['max','count'])
 #dataframe_splain(employees_max_date, 'employees_max_date')   
 employees_mean_tenure_prior = pd.DataFrame(employees_titles[employees_titles.is_current == False].groupby('emp_no').agg('tenure').mean())
@@ -311,14 +311,17 @@ employees_mean_tenure_prior = pd.DataFrame(employees_titles[employees_titles.is_
 employees_mean_tenure_prior['tenure_years'] = employees_mean_tenure_prior.tenure / 365     
 mean_tenure_prior = employees_mean_tenure_prior['tenure_years']   
 dataframe_splain(mean_tenure_prior, 'mean_tenure_prior')   
-mean_tenure_prior.plot.bar()
+mean_tenure_prior.plot.hist()
 
 ###############################################################################
 
 print_rule('''For each title, find the hire date of the employee that was hired most recently 
 with that title.''')
 
-
+title_max_hire_date = employees_titles.groupby('title').hire_date.agg(['min','max','count'])
+dataframe_splain(title_max_hire_date,'title_max_hire_date')
+employees_titles['max_hire_date'] = title_max_hire_date[employees_titles.title].max
+dataframe_splain(employees_titles, 'employees_titles')
 
 ###############################################################################
 
@@ -340,6 +343,11 @@ print_rule(
 '''Use your get_db_url function to help you explore the data from the chipotle 
 database. Use the data to answer the following questions:''', intro_fancy, False)
 
+chp_url = get_db_url(user, password, host, 'chipotle')
+#print(emps_url)
+
+orders = pd.read_sql('SELECT * FROM orders', chp_url)
+dataframe_splain(orders, 'orders')
 
 
 ###############################################################################
